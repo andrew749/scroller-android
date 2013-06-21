@@ -1,12 +1,8 @@
 package com.andrew749.facedetection;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,11 +11,12 @@ import android.graphics.PointF;
 import android.media.FaceDetector;
 import android.media.FaceDetector.Face;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import java.io.IOException;
 
 public class MainActivity extends Activity {
     private static final int TAKE_PICTURE_CODE = 100;
@@ -125,4 +122,30 @@ public class MainActivity extends Activity {
             }
         }
     };
+
+    private void determineFaceMovement(Face newface, Face oldface) {
+        int newmid, oldmid;
+        PointF n = new PointF();
+        PointF o = new PointF();
+        newface.getMidPoint(n);
+        oldface.getMidPoint(o);
+        Runtime runtime = Runtime.getRuntime();
+        if (n.y < o.y - 100) {
+            try {
+                runtime.exec("input keyevent KEYCODE_DPAD_UP");
+                Log.d("Success", "WENT UP");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (n.y > o.y + 100) {
+            try {
+                runtime.exec("input keyevent KEYCODE_DPAD_DOWN");
+                Log.d("Success", "Went down");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+        }
+    }
 }
